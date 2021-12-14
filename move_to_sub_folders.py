@@ -10,7 +10,6 @@ logger.setLevel(INFO)
 if __name__=='__main__':
   effectif_scannes=0
   effectif_a_traiter=0
-  effectif_tentes=0
   effectif_deplaces=0
   dossiers_crees=0
   dossiers_a_creer=0
@@ -32,10 +31,13 @@ if __name__=='__main__':
   logger.info(f"{effectif_a_traiter} fichiers à traiter.")
   if len(folders_to_create)>0:
     logger.info("{0} dossiers à créer: {1}".format(len(folders_to_create),", ".join(folders_to_create)))
-  reponse=input('(P)rocéder ou (Q)uitter ?')
-  if reponse.lower()=="q":
-    logger.info("Opération annulée, quitter.")
+  if effectif_a_traiter==0:
     quit()
+  else:
+    reponse=input('(P)rocéder ou (Q)uitter ?')
+    if reponse.lower()=="q":
+      logger.info("Opération annulée, quitter.")
+      quit()
 
   for folder_name in folders_to_create:
     is_done=False
@@ -85,5 +87,5 @@ if __name__=='__main__':
 
   logger.info(f"{effectif_scannes} fichiers ont été scannés.")
   logger.info(f"{dossiers_crees} dossiers ont été créés.")
-  logger.info(f"{effectif_tentes} fichiers ont fait l'objet d'une tentative de transfert.")
+  logger.info(f"{effectif_a_traiter} fichiers ont fait l'objet d'une tentative de transfert.")
   logger.info(f"{effectif_deplaces} fichiers ont été déplacés avec succes.")

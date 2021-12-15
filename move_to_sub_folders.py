@@ -79,7 +79,7 @@ if __name__=='__main__':
         created_folders.add(folder_name)
         is_done = True
       except:
-        reponse = input(f"Création du dossier {folder_name} impossible: (R)éessayer,(I)gnorer ou (Q)uitter ? ").lower()
+        reponse = input(f"(҂◡_◡) Création du dossier {folder_name} impossible: (R)éessayer,(I)gnorer ou (Q)uitter ? ").lower()
         if reponse == "q":
           logger.error(f" ¯\_(⊙︿⊙)_/¯ Création du dossier {folder_name} impossible, quitter a été choisi")
           quit()

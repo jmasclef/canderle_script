@@ -118,7 +118,7 @@ if __name__=='__main__':
     logger.info("{} fichier(s) transféré(s): {}.".format(len(transfered_files_list), ", ".join(transfered_files_list)))
 
     if replaced_files_list.__len__()>0:
-      logger.info("{} fichier(s) ont été remplacés à destination: {}.".format(len(replaced_files_list), ", ".join(replaced_files_list)))
+      logger.info("{} fichier(s) remplacé(s) à destination: {}.".format(len(replaced_files_list), ", ".join(replaced_files_list)))
 
     if ignored_files_list.__len__()>0:
       logger.warning("(҂◡_◡) {} fichier(s) ignoré(s): {}.".format(len(ignored_files_list), ", ".join(ignored_files_list)))

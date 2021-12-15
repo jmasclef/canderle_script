@@ -117,7 +117,7 @@ if __name__=='__main__':
           replaced_files_list.add(file_name)
           logger.info(f"Le fichier {file_name} a été remplacé. ")
         except:
-          reponse = input(f"Transfert du fichier {file_name} impossible: (R)éessayer,(I)gnorer ou (Q)uitter ? ")
+          reponse = input(f"(҂◡_◡) Transfert du fichier {file_name} impossible: (R)éessayer,(I)gnorer ou (Q)uitter ? ")
           if reponse.lower() == "q":
             logger.error(f" ¯\_(⊙︿⊙)_/¯ Transfert du fichier {file_name} impossible, quitter a été choisi")
             quit()

@@ -1,6 +1,6 @@
 import os, sys, logging, getopt
-
 from shutil import move as move_file
+
 from logging import DEBUG, INFO, WARNING, ERROR, CRITICAL
 logger=logging.getLogger('LOG')
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s')
@@ -12,10 +12,10 @@ if __name__=='__main__':
   if argumentList.__len__()>0:
     try:
       optlist, args = getopt.getopt(argumentList, 'd:')
+      _, target_folder=optlist[0]
     except:
       logger.error(" ¯\_(⊙︿⊙)_/¯ arguments non reconnus: utiliser '-d destination' pour exécuter le script dans un autre dossier.")
       quit()
-    _, target_folder=optlist[0]
 
     if not os.path.isdir(target_folder):
       logger.error(f" ¯\_(⊙︿⊙)_/¯ le dossier nommé {target_folder} n'a pas été trouvé.")

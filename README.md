@@ -10,3 +10,4 @@ python ./move_to_sub_folders.py -d dossier_cible<br/>
 OU<br/>
 python3 ./move_to_sub_folders.py -d dossier_cible<br/>
 
+ou utiliser le .exe dans dist avec le PATH et l'option -d dossier_cible

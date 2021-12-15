@@ -6,6 +6,10 @@ logger=logging.getLogger('LOG')
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s')
 logger.setLevel(INFO)
 
+sorry_face=" ¯\_(o_O)_/¯ "
+shamefull_face="(҂-_-) "
+happy_face="('^_^) "
+
 def build_folderName(file_name:str):
   #yyy est folder_name pour 'xxx_yyy.zzz.ext'
   if (file_name.split('.').__len__()==3) and (file_name.split('.')[0].split('_').__len__()==2):
@@ -17,17 +21,20 @@ def build_folderName(file_name:str):
 if __name__=='__main__':
   argumentList = sys.argv[1:]
   target_folder=None
+  quit_sentence="Presser enter pour quitter."
   if argumentList.__len__()>0:
     try:
       optlist, args = getopt.getopt(argumentList, 'd:')
       _, target_folder=optlist[0]
     except:
-      logger.error(" ¯\_(⊙︿⊙)_/¯ arguments non reconnus: utiliser '-d destination' pour exécuter le script dans un autre dossier.")
-      quit()
+      logger.error(" {sorry_face} arguments non reconnus: utiliser '-d destination' pour exécuter le script dans un autre dossier.")
+      input(quit_sentence)
+      sys.exit()
 
     if not os.path.isdir(target_folder):
-      logger.error(f" ¯\_(⊙︿⊙)_/¯ le dossier nommé {target_folder} n'a pas été trouvé.")
-      quit()
+      logger.error(f" {sorry_face} le dossier nommé {target_folder} n'a pas été trouvé.")
+      input(quit_sentence)
+      sys.exit()
     else:
       target_folder = os.path.abspath(target_folder) #transforme les chemins relatifs en absolus
       logger.info(f"Exécution du script dans le dossier destination: {target_folder}")
@@ -55,8 +62,9 @@ if __name__=='__main__':
         if folder_name is not None:
           target_files_list.add((entry.name, folder_name))
           if os.path.isfile(folder_name):
-            logger.error(f" ¯\_(⊙︿⊙)_/¯ Le traitement du fichier {entry.name} est impossible, le fichier existant {folder_name} va bloquer la création du dossier !")
-            quit()
+            logger.error(f" {sorry_face} Le traitement du fichier {entry.name} est impossible, le fichier existant {folder_name} va bloquer la création du dossier !")
+            input(quit_sentence)
+            sys.exit()
       elif entry.is_dir():
         existing_folders.add(entry.name)
 
@@ -70,13 +78,15 @@ if __name__=='__main__':
     logger.info("{0} dossiers à créer: {1}".format(len(folders_to_create),", ".join(folders_to_create)))
 
   if target_files_list.__len__()==0:
-    logger.warning(" ¯\_(⊙︿⊙)_/¯ Aucune opération identifiée, quitter.")
-    quit()
+    logger.warning(f" {sorry_face} Aucune opération identifiée, quitter.")
+    input(quit_sentence)
+    sys.exit()
   else:
     reponse=input('(P)rocéder ou (Q)uitter ? ')
     if reponse.lower()!="p":
-      logger.warning(" ¯\_(⊙︿⊙)_/¯ Opération annulée, quitter.")
-      quit()
+      logger.warning(f" {sorry_face} Opération annulée, quitter.")
+      input(quit_sentence)
+      sys.exit()
 
   for folder_name in folders_to_create:
     is_done=False
@@ -88,14 +98,15 @@ if __name__=='__main__':
         created_folders.add(folder_name)
         is_done = True
       except:
-        reponse = input(f"(҂◡_◡) Création du dossier {folder_name} impossible: (R)éessayer,(I)gnorer ou (Q)uitter ? ").lower()
+        reponse = input(f"{shamefull_face}Création du dossier {folder_name} impossible: (R)éessayer,(I)gnorer ou (Q)uitter ? ").lower()
         if reponse == "q":
-          logger.error(f" ¯\_(⊙︿⊙)_/¯ Création du dossier {folder_name} impossible, quitter a été choisi")
-          quit()
+          logger.error(f" {sorry_face} Création du dossier {folder_name} impossible, quitter a été choisi")
+          input(quit_sentence)
+          sys.exit()
         elif reponse == "r":
           is_done = False
         elif reponse == "i":
-          logger.warning(f"(҂◡_◡) Création du dossier {folder_name} impossible, ignorer a été choisi !'")
+          logger.warning(f"{shamefull_face}Création du dossier {folder_name} impossible, ignorer a été choisi !'")
           ignored_folders.add(folder_name)
           is_done = True
         else:
@@ -104,11 +115,11 @@ if __name__=='__main__':
 
   for file_name, folder_name in target_files_list:
     if not os.path.isdir(folder_name):
-      logger.error(f"(҂◡_◡) Transfert du fichier {file_name} impossible, le dossier  {folder_name} n\'existe pas !")
+      logger.error(f"{shamefull_face}Transfert du fichier {file_name} impossible, le dossier  {folder_name} n\'existe pas !")
       ignored_files_list.add(file_name)
       continue
     elif os.path.isfile(folder_name) :
-      logger.error(f"(҂◡_◡) Transfert du fichier {file_name} impossible, un fichier porte le nom du dossier destination {folder_name} !'")
+      logger.error(f"{shamefull_face}Transfert du fichier {file_name} impossible, un fichier porte le nom du dossier destination {folder_name} !'")
       ignored_files_list.add(file_name)
       continue
 
@@ -126,18 +137,19 @@ if __name__=='__main__':
           replaced_files_list.add(file_name)
           logger.info(f"Le fichier {file_name} a été remplacé. ")
         except:
-          reponse = input(f"(҂◡_◡) Transfert du fichier {file_name} impossible: (R)éessayer,(I)gnorer ou (Q)uitter ? ")
+          reponse = input(f"{shamefull_face}Transfert du fichier {file_name} impossible: (R)éessayer,(I)gnorer ou (Q)uitter ? ")
           if reponse.lower() == "q":
-            logger.error(f" ¯\_(⊙︿⊙)_/¯ Transfert du fichier {file_name} impossible, quitter a été choisi")
-            quit()
+            logger.error(f"{sorry_face}Transfert du fichier {file_name} impossible, quitter a été choisi")
+            input(quit_sentence)
+            sys.exit()
           elif reponse.lower() == "r":
             is_done = False
           elif reponse.lower() == "i":
-            logger.error(f"(҂◡_◡) Transfert du fichier {file_name} impossible, ignorer a été choisi, le fichier {file_name} n\' pas été traité !'")
+            logger.error(f"{shamefull_face}Transfert du fichier {file_name} impossible, ignorer a été choisi, le fichier {file_name} n\' pas été traité !'")
             ignored_files_list.add(file_name)
             is_done = True
           else:
-            print("(҂◡_◡) Choix non reconnu => Réessayer")
+            print(f"{shamefull_face}Choix non reconnu => Réessayer")
             is_done = False
 
   logger.info(f"{scanned_files} fichier(s) ont été scanné(s).")
@@ -151,10 +163,10 @@ if __name__=='__main__':
     logger.info("{} dossier(s) déjà créé(s) précédemment: {}.".format(len(previous_created_folders), ", ".join(previous_created_folders)))
 
   if ignored_folders.__len__()>0:
-    logger.warning("(҂◡_◡) {} dossier(s) ignoré(s): {}.".format(len(ignored_folders), ", ".join(ignored_folders)))
+    logger.warning("{}{} dossier(s) ignoré(s): {}.".format(shamefull_face,len(ignored_folders), ", ".join(ignored_folders)))
   else:
     if created_folders.__len__()>0:
-      logger.info(" ᕙ(⇀‸↼)ᕗ Tous les dossiers nécessaires ont été créés.")
+      logger.info(f"{happy_face} Tous les dossiers nécessaires ont été créés.")
 
   if transfered_files_list.__len__()>0:
 
@@ -164,13 +176,14 @@ if __name__=='__main__':
       logger.info("{} fichier(s) remplacé(s) à destination: {}.".format(len(replaced_files_list), ", ".join(replaced_files_list)))
 
     if ignored_files_list.__len__()>0:
-      logger.warning("(҂◡_◡) {} fichier(s) ignoré(s): {}.".format(len(ignored_files_list), ", ".join(ignored_files_list)))
+      logger.warning("{}{} fichier(s) ignoré(s): {}.".format(shamefull_face,len(ignored_files_list), ", ".join(ignored_files_list)))
     else:
-      logger.info(" ᕙ(⇀‸↼)ᕗ Tous les fichiers à traiter ont bien été transférés !")
-
+      logger.info(f"{happy_face} Tous les fichiers à traiter ont bien été transférés !")
 
   else:
-    logger.info("(҂◡_◡) Aucun fichier n'a été transféré.")
+    logger.info(f"{shamefull_face} Aucun fichier n'a été transféré.")
+
+  input(quit_sentence)
 
 
 

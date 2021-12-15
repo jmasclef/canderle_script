@@ -86,7 +86,7 @@ if __name__=='__main__':
         elif reponse == "r":
           is_done = False
         elif reponse == "i":
-          logger.warning(f"Création du dossier {folder_name} impossible, ignorer a été choisi !'")
+          logger.warning(f"(҂◡_◡) Création du dossier {folder_name} impossible, ignorer a été choisi !'")
           ignored_folders.add(folder_name)
           is_done = True
         else:

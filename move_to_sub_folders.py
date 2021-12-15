@@ -8,9 +8,10 @@ logger.setLevel(INFO)
 
 def build_folderName(file_name:str):
   #yyy est folder_name pour 'xxx_yyy.zzz.ext'
-  if file_name.split('.').__len__()==3 and file_name.split('.')[0].split('_').__len__()==2:
+  if (file_name.split('.').__len__()==3) and (file_name.split('.')[0].split('_').__len__()==2):
     return file_name.split('.')[0].split('_')[1]
   else:
+    #dans toute autre configuration du nom de fichier, décliner
     return None
 
 if __name__=='__main__':
@@ -36,21 +37,21 @@ if __name__=='__main__':
     target_folder=os.getcwd()
     logger.info(f"Exécution du script dans le dossier courant: {target_folder}")
 
-  scanned_files         =0
-  target_files_list     =set()
-  transfered_files_list =set()
-  replaced_files_list   =set()
-  ignored_files_list    =set()
-  folders_to_create     =set()
-  created_folders       =set()
-  ignored_folders       =set()
-  existing_folders      =set()
+  scanned_files         =0      #effectif des fichiers scannés dans le dossier
+  target_files_list     =set()  #liste des fichiers à traiter
+  transfered_files_list =set()  #in fine liste des fichier transférés
+  replaced_files_list   =set()  #in fine liste des fichier transférés qui ont écrasé une version antérieure
+  ignored_files_list    =set()  #in fine liste des fichiers qui n'ont pas pu être traités
+  folders_to_create     =set()  #liste des dossiers à créer pour l'opération
+  created_folders       =set()  #in fine liste des dossiers créés
+  ignored_folders       =set()  #in fine liste des dossiers qui n'ont pas pu être créés
+  existing_folders      =set()  #liste des dossiers existants rencontrés durant le scan
+
   with os.scandir(target_folder) as entries:
     for entry in entries:
       if entry.is_file():
         scanned_files+=1
         folder_name=build_folderName(entry.name)
-        print(entry.name)
         if folder_name is not None:
           target_files_list.add((entry.name, folder_name))
           if os.path.isfile(folder_name):

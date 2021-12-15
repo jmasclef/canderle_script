@@ -1,5 +1,4 @@
-import os
-import logging
+import os, sys, logging, getopt
 
 from shutil import move as move_file
 from logging import DEBUG, INFO, WARNING, ERROR, CRITICAL
@@ -8,6 +7,28 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s')
 logger.setLevel(INFO)
 
 if __name__=='__main__':
+  argumentList = sys.argv[1:]
+  target_folder=None
+  if argumentList.__len__()>0:
+    try:
+      optlist, args = getopt.getopt(argumentList, 'd:')
+    except:
+      logger.error(" ¯\_(⊙︿⊙)_/¯ arguments non reconnus: utiliser '-d destination' pour exécuter le script dans un autre dossier.")
+      quit()
+    _, target_folder=optlist[0]
+
+    if not os.path.isdir(target_folder):
+      logger.error(f" ¯\_(⊙︿⊙)_/¯ le dossier nommé {target_folder} n'a pas été trouvé.")
+      quit()
+    else:
+      target_folder = os.path.abspath(target_folder) #transforme les chemins relatifs en absolus
+      logger.info(f"Exécution du script dans le dossier destination: {target_folder}")
+      os.chdir(target_folder)
+
+  if target_folder is None:
+    target_folder=os.getcwd()
+    logger.info(f"Exécution du script dans le dossier courant: {target_folder}")
+
   scanned_files=0
   target_files_list=set()
   transfered_files_list=set()
@@ -17,13 +38,16 @@ if __name__=='__main__':
   created_folders=set()
   ignored_folders=set()
   existing_folders=set()
-  with os.scandir() as entries:
+  with os.scandir(target_folder) as entries:
     for entry in entries:
       if entry.is_file():
         scanned_files+=1
         if entry.name.split('_').__len__()==3:
           folder_name=entry.name.split('_')[1]
           target_files_list.add((entry.name, folder_name))
+          if os.path.isfile(folder_name):
+            logger.error(f" ¯\_(⊙︿⊙)_/¯ Le traitement du fichier {entry.name} est impossible, le fichier existant {folder_name} va bloquer la création du dossier !")
+            quit()
       elif entry.is_dir():
         existing_folders.add(entry.name)
 
@@ -35,6 +59,7 @@ if __name__=='__main__':
 
   if len(folders_to_create)>0:
     logger.info("{0} dossiers à créer: {1}".format(len(folders_to_create),", ".join(folders_to_create)))
+
   if target_files_list.__len__()==0:
     logger.warning(" ¯\_(⊙︿⊙)_/¯ Aucune opération identifiée, quitter.")
     quit()
@@ -64,11 +89,20 @@ if __name__=='__main__':
           logger.warning(f"Création du dossier {folder_name} impossible, ignorer a été choisi !'")
           ignored_folders.add(folder_name)
           is_done = True
-      else:
-          print("Choix non reconnu => Réessayer")
-          is_done = False
+        else:
+            print("Choix non reconnu => Réessayer")
+            is_done = False
 
   for file_name, folder_name in target_files_list:
+    if not os.path.isdir(folder_name):
+      logger.error(f"(҂◡_◡) Transfert du fichier {file_name} impossible, le dossier  {folder_name} n\'existe pas !")
+      ignored_files_list.add(file_name)
+      continue
+    elif os.path.isfile(folder_name) :
+      logger.error(f"(҂◡_◡) Transfert du fichier {file_name} impossible, un fichier porte le nom du dossier destination {folder_name} !'")
+      ignored_files_list.add(file_name)
+      continue
+
     is_done = False
     while not is_done:
       try:

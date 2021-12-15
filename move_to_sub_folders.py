@@ -6,6 +6,13 @@ logger=logging.getLogger('LOG')
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s')
 logger.setLevel(INFO)
 
+def build_folderName(file_name:str):
+  #yyy est folder_name pour 'xxx_yyy.zzz.ext'
+  if file_name.split('.').__len__()==3 and file_name.split('.')[0].split('_').__len__()==2:
+    return file_name.split('.')[0].split('_')[1]
+  else:
+    return None
+
 if __name__=='__main__':
   argumentList = sys.argv[1:]
   target_folder=None
@@ -29,21 +36,22 @@ if __name__=='__main__':
     target_folder=os.getcwd()
     logger.info(f"Exécution du script dans le dossier courant: {target_folder}")
 
-  scanned_files=0
-  target_files_list=set()
-  transfered_files_list=set()
-  replaced_files_list=set()
-  ignored_files_list=set()
-  folders_to_create=set()
-  created_folders=set()
-  ignored_folders=set()
-  existing_folders=set()
+  scanned_files         =0
+  target_files_list     =set()
+  transfered_files_list =set()
+  replaced_files_list   =set()
+  ignored_files_list    =set()
+  folders_to_create     =set()
+  created_folders       =set()
+  ignored_folders       =set()
+  existing_folders      =set()
   with os.scandir(target_folder) as entries:
     for entry in entries:
       if entry.is_file():
         scanned_files+=1
-        if entry.name.split('_').__len__()==3:
-          folder_name=entry.name.split('_')[1]
+        folder_name=build_folderName(entry.name)
+        print(entry.name)
+        if folder_name is not None:
           target_files_list.add((entry.name, folder_name))
           if os.path.isfile(folder_name):
             logger.error(f" ¯\_(⊙︿⊙)_/¯ Le traitement du fichier {entry.name} est impossible, le fichier existant {folder_name} va bloquer la création du dossier !")

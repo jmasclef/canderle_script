@@ -36,7 +36,7 @@ if __name__=='__main__':
   if len(folders_to_create)>0:
     logger.info("{0} dossiers à créer: {1}".format(len(folders_to_create),", ".join(folders_to_create)))
   if target_files_list.__len__()==0:
-    logger.warning(" ¯\_(⊙︿⊙)_/¯ ___Aucune opération identifiée, quitter.")
+    logger.warning(" ¯\_(⊙︿⊙)_/¯ Aucune opération identifiée, quitter.")
     quit()
   else:
     reponse=input('(P)rocéder ou (Q)uitter ? ')
